@@ -22,6 +22,7 @@
 
 const taskList = document.querySelector(".collection");
 const clearTasksBtn = document.querySelector(".clear-tasks");
+const filter = document.querySelector("#filter");
 let tasks = JSON.parse(localStorage.getItem("tasks"));
 
 //get tasks from LS update UI
@@ -32,6 +33,23 @@ clearTasksBtn.addEventListener("click", clearTasks);
 taskList.addEventListener("click", removeTask);
 //handleform submit
 document.querySelector("form").addEventListener("submit", handleSubmit);
+// Filter tasks event
+filter.addEventListener("keyup", filterTasks);
+
+// Filter Tasks
+function filterTasks(e) {
+  // debugger;
+  const text = e.target.value.toLowerCase();
+
+  document.querySelectorAll(".collection-item").forEach(task => {
+    const item = task.firstChild.textContent.toLowerCase();
+    if (item.indexOf(text) != -1) {
+      task.style.display = "block";
+    } else {
+      task.style.display = "none";
+    }
+  });
+}
 
 // Remove Task
 function removeTask(e) {
@@ -40,7 +58,6 @@ function removeTask(e) {
     // console.log(e.target.parentElement.parentElement.textContent); => task value
     let taskToRemove = e.target.parentElement.parentElement;
     taskToRemove.remove();
-
     // Remove from LS
     let tasks = getLocalStorage();
     tasks.forEach((task, index) => {
